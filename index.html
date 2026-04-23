@@ -3,25 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Sarah Jenkins - Digital Business Card</title>
+    <title>Digital Business Card</title>
     
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📇</text></svg>">
+    <meta name="theme-color" content="#0d9488">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
     <style>
         /* Pattern overlay for the header */
         .bg-pattern {
             background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
             opacity: 0.1;
         }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100%); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        /* Toast Notification */
+        #toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translate(-50%, 100%);
+            background: #1f2937;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 99px;
+            font-weight: 500;
+            font-size: 14px;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #toast.show {
+            transform: translate(-50%, 0);
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans text-slate-800 selection:bg-teal-100">
 
-    <div class="w-full max-w-sm bg-white rounded-3xl shadow-xl overflow-hidden relative">
+    <div class="w-full max-w-sm bg-white rounded-3xl shadow-xl overflow-hidden relative opacity-0 animate-fade-in">
         
         <!-- Header Background -->
         <div class="h-32 bg-gradient-to-r from-teal-500 to-emerald-600 w-full relative">
@@ -34,112 +78,209 @@
           <!-- Profile Photo -->
           <div class="w-32 h-32 rounded-full border-4 border-white shadow-md overflow-hidden -mt-16 bg-white z-10">
             <img 
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
-              alt="Photo of Dr. Sarah Jenkins" 
-              className="w-full h-full object-cover"
+              id="profile-photo"
+              src="" 
+              alt="Profile Photo" 
+              loading="lazy"
+              class="w-full h-full object-cover"
             />
           </div>
 
           <!-- Name & Title -->
-          <div class="text-center mt-4 mb-6">
-            <h1 class="text-2xl font-bold text-slate-900 mb-1">Dr. Sarah Jenkins</h1>
-            <p class="text-teal-600 font-medium">Clinical Director</p>
-            <p class="text-sm text-slate-500 mt-1">Careloop</p>
+          <div class="text-center mt-4 mb-6 w-full">
+            <h1 id="profile-name" class="text-2xl font-bold text-slate-900 mb-1 min-h-[32px]"></h1>
+            <p id="profile-role" class="text-teal-600 font-medium min-h-[24px]"></p>
+            <p id="profile-company" class="text-sm text-slate-500 mt-1 min-h-[20px]"></p>
           </div>
 
           <!-- Bio -->
-          <p class="text-center text-sm text-slate-600 mb-8 leading-relaxed">
-            Streamlining patient pathways and improving healthcare outcomes through innovative digital solutions.
-          </p>
+          <p id="profile-bio" class="text-center text-sm text-slate-600 mb-8 leading-relaxed min-h-[40px]"></p>
 
           <!-- Action Buttons -->
           <div class="w-full space-y-3">
             <a 
-              href="https://careloop.health" 
+              id="link-website"
+              href="#" 
               target="_blank" 
               rel="noopener noreferrer"
+              aria-label="Visit Website"
               class="w-full flex items-center justify-center gap-3 py-3 px-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-slate-700 transition-colors font-medium"
             >
-              <i data-lucide="globe" class="text-teal-600 w-5 h-5"></i>
-              Visit Careloop.health
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-600"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+              <span id="website-text">Visit Website</span>
             </a>
 
             <a 
-              href="https://www.linkedin.com/in/yourprofile" 
+              id="link-linkedin"
+              href="#" 
               target="_blank" 
               rel="noopener noreferrer"
+              aria-label="Connect on LinkedIn"
               class="w-full flex items-center justify-center gap-3 py-3 px-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-slate-700 transition-colors font-medium"
             >
-              <i data-lucide="linkedin" class="text-[#0A66C2] w-5 h-5"></i>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#0A66C2]"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
               Connect on LinkedIn
             </a>
 
             <a 
-              href="mailto:hello@careloop.health" 
+              id="link-email"
+              href="#" 
+              aria-label="Send Email"
               class="w-full flex items-center justify-center gap-3 py-3 px-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-slate-700 transition-colors font-medium"
             >
-              <i data-lucide="mail" class="text-slate-500 w-5 h-5"></i>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
               Email Me
             </a>
 
             <a 
-              href="tel:+442079460958" 
+              id="link-phone"
+              href="#" 
+              aria-label="Call Phone Number"
               class="w-full flex items-center justify-center gap-3 py-3 px-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-slate-700 transition-colors font-medium"
             >
-              <i data-lucide="phone" class="text-slate-500 w-5 h-5"></i>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               Call Me
             </a>
           </div>
 
           <!-- Location Indicator -->
-          <div class="flex items-center gap-2 mt-8 text-sm text-slate-400">
-            <i data-lucide="map-pin" class="w-4 h-4"></i>
-            London, United Kingdom
+          <div id="location-container" class="flex items-center gap-2 mt-8 text-sm text-slate-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span id="profile-location"></span>
           </div>
 
           <!-- Save Contact Button -->
           <button 
+            type="button"
             onclick="handleSaveContact()"
+            aria-label="Download Contact Card"
             class="w-full mt-6 flex items-center justify-center gap-2 py-3 px-4 bg-teal-600 hover:bg-teal-700 text-white rounded-xl shadow-md transition-all active:scale-95 font-semibold"
           >
-            <i data-lucide="download" class="w-5 h-5"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
             Save Contact
           </button>
 
         </div>
     </div>
 
-    <!-- Script for handling the vCard generation and initialising icons -->
-    <script>
-        // Initialise Lucide icons
-        lucide.createIcons();
+    <!-- Toast Notification -->
+    <div id="toast">Contact downloaded successfully</div>
 
-        // vCard Configuration details - ensure these match the HTML above
+    <script>
+        // ============================================================================
+        // CONFIGURATION
+        // Edit these default values. 
+        // Note: You can override these via URL parameters (e.g. ?name=John&role=CEO)
+        // ============================================================================
         const CONFIG = {
             name: "Dr. Sarah Jenkins",
             role: "Clinical Director",
             company: "Careloop",
             bio: "Streamlining patient pathways and improving healthcare outcomes through innovative digital solutions.",
+            photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+            location: "London, United Kingdom",
             website: "https://careloop.health",
+            websiteDisplay: "Visit Careloop.health",
             linkedin: "https://www.linkedin.com/in/yourprofile",
             email: "hello@careloop.health",
             phone: "+44 20 7946 0958"
         };
+        // ============================================================================
+
+        // Helper: Escape special characters for vCard compliance
+        function escapeVCard(value) {
+            if (!value) return '';
+            return value
+                .replace(/\\/g, '\\\\')
+                .replace(/\n/g, '\\n')
+                .replace(/,/g, '\\,')
+                .replace(/;/g, '\\;');
+        }
+
+        // Helper: Toggle link visibility and format href
+        function toggleLink(id, value, formatter = v => v) {
+            const el = document.getElementById(id);
+            if (value) {
+                el.href = formatter(value);
+                el.style.display = 'flex'; // maintain tailwind flex layout
+            } else {
+                el.style.display = 'none';
+            }
+        }
+
+        // Helper: Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Override CONFIG with URL parameters if they exist
+            const params = new URLSearchParams(window.location.search);
+            Object.keys(CONFIG).forEach(key => {
+                CONFIG[key] = params.get(key) || CONFIG[key];
+            });
+
+            // Security / Data validation
+            if (CONFIG.website && !CONFIG.website.startsWith('http')) {
+                console.warn('Website URL should include protocol (http:// or https://)');
+                CONFIG.website = 'https://' + CONFIG.website;
+            }
+
+            document.title = `${CONFIG.name} - Digital Business Card`;
+
+            // Inject text safely
+            document.getElementById('profile-name').textContent = CONFIG.name;
+            document.getElementById('profile-role').textContent = CONFIG.role;
+            document.getElementById('profile-company').textContent = CONFIG.company;
+            document.getElementById('profile-bio').textContent = CONFIG.bio;
+            document.getElementById('website-text').textContent = CONFIG.websiteDisplay || 'Visit Website';
+            document.getElementById('profile-location').textContent = CONFIG.location;
+
+            // Handle Photo with fallback
+            const photoEl = document.getElementById('profile-photo');
+            photoEl.onerror = () => {
+                // Fallback to a solid color or initials placeholder if image fails to load
+                photoEl.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%230d9488"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="150" fill="white" font-family="sans-serif">${CONFIG.name.charAt(0)}</text></svg>`;
+            };
+            photoEl.src = CONFIG.photoUrl;
+            photoEl.alt = `Photo of ${CONFIG.name}`;
+
+            // Handle Links & Conditional visibility
+            toggleLink('link-website', CONFIG.website);
+            toggleLink('link-linkedin', CONFIG.linkedin);
+            toggleLink('link-email', CONFIG.email, v => `mailto:${v}`);
+            toggleLink('link-phone', CONFIG.phone, v => `tel:${v.replace(/\s+/g, '')}`);
+
+            if (!CONFIG.location) {
+                document.getElementById('location-container').style.display = 'none';
+            }
+        });
 
         function handleSaveContact() {
+            // Generate robust vCard
             const vcard = `BEGIN:VCARD
 VERSION:3.0
-FN:${CONFIG.name}
-ORG:${CONFIG.company}
-TITLE:${CONFIG.role}
-TEL;TYPE=WORK,VOICE:${CONFIG.phone}
-EMAIL;TYPE=PREF,INTERNET:${CONFIG.email}
-URL:${CONFIG.website}
-X-SOCIALPROFILE;type=linkedin:${CONFIG.linkedin}
-NOTE:${CONFIG.bio}
+FN:${escapeVCard(CONFIG.name)}
+N:${escapeVCard(CONFIG.name)};;;;
+ORG:${escapeVCard(CONFIG.company)}
+TITLE:${escapeVCard(CONFIG.role)}
+${CONFIG.phone ? `TEL;TYPE=WORK,VOICE:${CONFIG.phone}` : ''}
+${CONFIG.email ? `EMAIL;TYPE=PREF,INTERNET:${CONFIG.email}` : ''}
+${CONFIG.website ? `URL:${CONFIG.website}` : ''}
+${CONFIG.linkedin ? `X-SOCIALPROFILE;type=linkedin:${CONFIG.linkedin}` : ''}
+${CONFIG.location ? `ADR:;;${escapeVCard(CONFIG.location)};;;;` : ''}
+NOTE:${escapeVCard(CONFIG.bio)}
 END:VCARD`;
 
-            const blob = new Blob([vcard], { type: "text/vcard" });
+            // Filter out empty lines to keep vCard clean
+            const cleanVcard = vcard.replace(/^\s*[\r\n]/gm, '');
+
+            const blob = new Blob([cleanVcard], { type: "text/vcard" });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -148,6 +289,8 @@ END:VCARD`;
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+
+            showToast('Contact downloaded');
         }
     </script>
 </body>
