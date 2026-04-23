@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Sarah Jenkins - Digital Business Card</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Pattern overlay for the header */
+        .bg-pattern {
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+            opacity: 0.1;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans text-slate-800 selection:bg-teal-100">
+
+    <div class="w-full max-w-sm bg-white rounded-3xl shadow-xl overflow-hidden relative">
+        
+        <!-- Header Background -->
+        <div class="h-32 bg-gradient-to-r from-teal-500 to-emerald-600 w-full relative">
+            <div class="absolute inset-0 bg-pattern"></div>
+        </div>
+
+        <!-- Profile Content -->
+        <div class="px-6 pb-8 relative flex flex-col items-center">
+          
+          <!-- Profile Photo -->
+          <div class="w-32 h-32 rounded-full border-4 border-white shadow-md overflow-hidden -mt-16 bg-white z-10">
+            <img 
+              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+              alt="Photo of Dr. Sarah Jenkins" 
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          <!-- Name & Title -->
+          <div class="text-center mt-4 mb-6">
+            <h1 class="text-2xl font-bold text-slate-900 mb-1">Dr. Sarah Jenkins</h1>
+            <p class="text-teal-600 font-medium">Clinical Director</p>
+            <p class="text-sm text-slate-500 mt-1">Careloop</p>
+          </div>
+
+          <!-- Bio -->
+          <p class="text-center text-sm text-slate-600 mb-8 leading-relaxed">
+            Streamlining patient pathways and improving healthcare outcomes through innovative digital solutions.
+          </p>
+
+          <!-- Action Buttons -->
+          <div class="w-full space-y-3">
+            <a 
+              href="https://careloop.health" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="w-full flex items-center justify-center gap-3 py-3 px-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-slate-700 transition-colors font-medium"
+            >
+              <i data-lucide="globe" class="text-teal-600 w-5 h-5"></i>
+              Visit Careloop.health
+            </a>
+
+            <a 
+              href="https://www.linkedin.com/in/yourprofile" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="w-full flex items-center justify-center gap-3 py-3 px-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-slate-700 transition-colors font-medium"
+            >
+              <i data-lucide="linkedin" class="text-[#0A66C2] w-5 h-5"></i>
+              Connect on LinkedIn
+            </a>
+
+            <a 
+              href="mailto:hello@careloop.health" 
+              class="w-full flex items-center justify-center gap-3 py-3 px-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-slate-700 transition-colors font-medium"
+            >
+              <i data-lucide="mail" class="text-slate-500 w-5 h-5"></i>
+              Email Me
+            </a>
+
+            <a 
+              href="tel:+442079460958" 
+              class="w-full flex items-center justify-center gap-3 py-3 px-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-slate-700 transition-colors font-medium"
+            >
+              <i data-lucide="phone" class="text-slate-500 w-5 h-5"></i>
+              Call Me
+            </a>
+          </div>
+
+          <!-- Location Indicator -->
+          <div class="flex items-center gap-2 mt-8 text-sm text-slate-400">
+            <i data-lucide="map-pin" class="w-4 h-4"></i>
+            London, United Kingdom
+          </div>
+
+          <!-- Save Contact Button -->
+          <button 
+            onclick="handleSaveContact()"
+            class="w-full mt-6 flex items-center justify-center gap-2 py-3 px-4 bg-teal-600 hover:bg-teal-700 text-white rounded-xl shadow-md transition-all active:scale-95 font-semibold"
+          >
+            <i data-lucide="download" class="w-5 h-5"></i>
+            Save Contact
+          </button>
+
+        </div>
+    </div>
+
+    <!-- Script for handling the vCard generation and initialising icons -->
+    <script>
+        // Initialise Lucide icons
+        lucide.createIcons();
+
+        // vCard Configuration details - ensure these match the HTML above
+        const CONFIG = {
+            name: "Dr. Sarah Jenkins",
+            role: "Clinical Director",
+            company: "Careloop",
+            bio: "Streamlining patient pathways and improving healthcare outcomes through innovative digital solutions.",
+            website: "https://careloop.health",
+            linkedin: "https://www.linkedin.com/in/yourprofile",
+            email: "hello@careloop.health",
+            phone: "+44 20 7946 0958"
+        };
+
+        function handleSaveContact() {
+            const vcard = `BEGIN:VCARD
+VERSION:3.0
+FN:${CONFIG.name}
+ORG:${CONFIG.company}
+TITLE:${CONFIG.role}
+TEL;TYPE=WORK,VOICE:${CONFIG.phone}
+EMAIL;TYPE=PREF,INTERNET:${CONFIG.email}
+URL:${CONFIG.website}
+X-SOCIALPROFILE;type=linkedin:${CONFIG.linkedin}
+NOTE:${CONFIG.bio}
+END:VCARD`;
+
+            const blob = new Blob([vcard], { type: "text/vcard" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${CONFIG.name.replace(/\s+/g, '_')}_Contact.vcf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
